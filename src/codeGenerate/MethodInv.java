@@ -22,8 +22,11 @@ class MethodInv extends Expression {
 
 	// generate Method with duplicating
 	public static Vector<Expression> generate(int depth) {
+		// all possible methods generated in depth
 		Vector<Expression> methodsOfDep = new Vector<Expression>();
+		// all possible methods generated in depth minus one
 		Vector<Expression> methodsOfDepM1 = Expression.generate(depth - 1);
+		// all method names
 		Vector<MName> allMName = MName.allMethodName();
 		if (depth < 2) {
 		} else {
@@ -52,6 +55,7 @@ class MethodInv extends Expression {
 
 //	generate all possible parameter expressions
 //	which rank-th of mname's parameter is settled
+//	return result until rank equals method name's #parameter
 	private static Vector<Expression[]> generateParameterExps(Vector<Expression[]> expsParaV
 			,MName mname, Vector<Expression> methodsOfDepM1, int rank) {
 
@@ -59,13 +63,14 @@ class MethodInv extends Expression {
 			return expsParaV;
 		}else {
 			Vector<Expression[]> expParaV_auxi = new Vector<Expression[]>();
+//			Expression[] -> Vector<Expression[]>
 			for(Expression[] expPara : expsParaV) {
 				expParaV_auxi.addAll(addForeach(expPara,mname,methodsOfDepM1,rank));
 			}
 			return generateParameterExps(expParaV_auxi,mname,methodsOfDepM1,rank+1);
 		}
 	}
-//	Expression[] -> Vector<Expression[]>
+
 	public static Vector<Expression[]> addForeach(Expression[] expParaM1,
 			MName mname,Vector<Expression> methodsOfDepM1,int rank){
 		Vector<Expression[]> expParV = new Vector<Expression[]>();
