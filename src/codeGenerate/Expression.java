@@ -30,6 +30,7 @@ public abstract class Expression {
 		}
 		return exps;
 	}
+	
 
 	// score function
 	public float score(String keywords) {
@@ -108,5 +109,12 @@ public abstract class Expression {
 	public float addPrecise(float num1, float num2) {
 		return new BigDecimal(Float.toString(num1)).add(new BigDecimal(Float.toString(num2))).floatValue();
 	}
+	// eliminate duplicated expressions
+		// getDepth : expression -> number
+		// usage : return #methodname of the max depth of expression
+		// Example (just shape)
+		// (Int|Var).numMethod = 0
+		// (e0.Mname(e1...en)).numMethod = 1 + (max (e0.numMethod)....)
+	abstract public int getDepth();
 
 }

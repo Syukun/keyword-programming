@@ -39,6 +39,11 @@ class Int extends Expression {
 
 		return score;
 	}
+	
+	// getDepth
+	public int getDepth() {
+		return 1;
+	}
 
 	@Override
 	public Type getType() {

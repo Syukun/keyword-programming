@@ -119,15 +119,16 @@ public class ExpressionTest {
 
 	}
 
-//	@Test
-//	public void testBinGenerate() {
-//		int depth = 4;
-//		String keywords = "1 +";
-//		System.out.println("Int generate size : " + Int.generate(1).size());
-//		System.out.println("Operator size : " + Operator.allOperator().size());
-//		System.out.println("(Size)Bin Operator class generate : " + BinOp.generateDep(depth, keywords).size());
-//		BinOp.generateDep(depth, keywords).stream().forEach(System.out::println);
-//	}
+	// @Test
+	// public void testBinGenerate() {
+	// int depth = 4;
+	// String keywords = "1 +";
+	// System.out.println("Int generate size : " + Int.generate(1).size());
+	// System.out.println("Operator size : " + Operator.allOperator().size());
+	// System.out.println("(Size)Bin Operator class generate : " +
+	// BinOp.generateDep(depth, keywords).size());
+	// BinOp.generateDep(depth, keywords).stream().forEach(System.out::println);
+	// }
 
 	@Test
 	public void testTypeFunction() {
@@ -162,6 +163,23 @@ public class ExpressionTest {
 		// int j = Expression.generate(i).size();
 		// System.out.println("Count is : " + j);
 		// Expression.generate(i).stream().forEach(System.out::println);
+	}
+
+	@Test
+	public void testGeneral() {
+//		System.out.println("============================");
+//		Expression exp1 = new Int (1);
+//		Expression exp2 = new Var ("a",new Type ("String"));
+//		Expression exp3 = new Var ("b",new Type ("bType"));
+//		MName mt = new MName("add", new Type("boolean"), new Type[] { new Type("List<String>"),
+//				 new Type("String") });
+//		Expression exp4 = new MethodInv(exp1,mt,new Expression[] {exp1,exp2});
+//		Expression exp5 = new MethodInv(exp4,mt,new Expression[] {exp4,exp4});
+//		assertEquals(exp1.getDepth(),1);
+//		assertEquals(exp2.getDepth(),1);
+//		assertEquals(exp3.getDepth(),1);
+//		assertEquals(exp4.getDepth(),2);
+//		assertEquals(exp5.getDepth(),3);
 	}
 
 }

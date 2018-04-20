@@ -52,6 +52,11 @@ class Var extends Expression {
 
 		return score;
 	}
+	
+//	getDepth
+	public int getDepth() {
+		return 1;
+	}
 
 	public String toString() {
 		return v;

@@ -142,4 +142,10 @@ class BinOp extends Expression {
 		return new Type("Integer");
 	}
 
+	@Override
+	public int getDepth() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

@@ -117,6 +117,21 @@ class MethodInv extends Expression {
 		}
 		return score;
 	}
+	
+	// getDepth
+	public int getDepth() {
+		return 1 + this.maxNum(this.getExpFront(),this.getExpBack());
+	}
+	public int maxNum(Expression expF, Expression[] expsB) {
+		int depthOfExpF = expF.getDepth();
+		for(int i = 0 ; i < expsB.length ; i ++) {
+			int depthOfExpFI = expsB[i].getDepth();
+			if (depthOfExpF < depthOfExpFI) {
+				depthOfExpF = depthOfExpFI;
+			}
+		}
+		return depthOfExpF;
+	}
 
 	// to String()
 	public String toString() {
@@ -135,7 +150,7 @@ class MethodInv extends Expression {
 			return expBack2Str;
 		}
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
