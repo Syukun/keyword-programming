@@ -112,10 +112,10 @@ public class ExpressionTest {
 	@Test
 	public void testMaxScoreExpressions() {
 
-		String keywords = "add line"; // test Type System.
-		int depth = 3;
-		System.out.println("Keywords are : " + keywords + "\nDepth is : " + depth + "\nExpressions are : ");
-		Expression.maxScoreExpressions(depth, keywords).stream().forEach(System.out::println);
+//		String keywords = "add line"; // test Type System.
+//		int depth = 3;
+//		System.out.println("Keywords are : " + keywords + "\nDepth is : " + depth + "\nExpressions are : ");
+//		Expression.maxScoreExpressions(depth, keywords).stream().forEach(System.out::println);
 
 	}
 
@@ -159,14 +159,14 @@ public class ExpressionTest {
 
 	@Test
 	public void testGenerateMethodInv() {
-		// int i = 3;
-		// int j = Expression.generate(i).size();
-		// System.out.println("Count is : " + j);
-		// Expression.generate(i).stream().forEach(System.out::println);
+		 int i = 3;
+		 int j = Expression.generate(i).size();
+		 System.out.println("Count is : " + j);
+		 Expression.generate(i).stream().forEach(System.out::println);
 	}
 
 	@Test
-	public void testGeneral() {
+	public void testDepth() {
 //		System.out.println("============================");
 //		Expression exp1 = new Int (1);
 //		Expression exp2 = new Var ("a",new Type ("String"));
@@ -181,5 +181,12 @@ public class ExpressionTest {
 //		assertEquals(exp4.getDepth(),2);
 //		assertEquals(exp5.getDepth(),3);
 	}
+	
+	@Test
+	public void testDuplicateDeleteFunction() {
+		// addForeach
+		
+	}
+	
 
 }

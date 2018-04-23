@@ -20,7 +20,7 @@ class MethodInv extends Expression {
 
 	// giving the example of lines.add(pointOne,pointTwo);
 
-	// generate Method with duplicating
+	// generate Method without duplicating
 	public static Vector<Expression> generate(int depth) {
 		// all possible methods generated in depth
 		Vector<Expression> methodsOfDep = new Vector<Expression>();
@@ -34,15 +34,26 @@ class MethodInv extends Expression {
 			for (MName mname : allMName) {
 				// expOfDepM1 is an element of all expressions generated from depth minus one
 				for (Expression expOfDepM1 : methodsOfDepM1) {
+					// DUPLICATED : decide whether there is at least one expression in exact depth
+					// minus one if all of them are not then return true;
+					boolean DUPLICATED = true;
 					if (mname.matchReceiverType(expOfDepM1.getType())) {
-						// vector of all parameter expressions
-						// MName * Vector<Expression[]> * Int -> Vector<Expression[]>
-						Vector<Expression[]> expsParaV = new Vector<Expression[]>();
-						expsParaV.add(new Expression[0]);
-						Vector<Expression[]> expsParameterV = generateParameterExps(expsParaV,mname, methodsOfDepM1, 1);
-						for (Expression[] expParameter : expsParameterV) {
-							MethodInv methodInvOfDep = new MethodInv(expOfDepM1, mname, expParameter);
-							methodsOfDep.add(methodInvOfDep);
+						if (expOfDepM1.getDepth() == (depth - 1)) {
+							DUPLICATED = false;
+						}
+						// vector of expressions of all expressions including receiver and parameter
+						// expressions
+						Vector<DuplicateFlag> expsDF_V = new Vector<DuplicateFlag>();
+						expsDF_V.add(new DuplicateFlag(DUPLICATED, expOfDepM1, new Expression[0]));
+						Vector<DuplicateFlag> expsAllParaDF_V = generateParameterExps(expsDF_V, mname, methodsOfDepM1,
+								1, depth);
+						for (DuplicateFlag expsAllParaDF : expsAllParaDF_V) {
+							if (!expsAllParaDF.isFlag()) {
+								MethodInv methodInvOfDep = new MethodInv(expsAllParaDF.getExpR(), mname,
+										expsAllParaDF.getExpsP());
+								methodsOfDep.add(methodInvOfDep);
+							}
+
 						}
 					}
 
@@ -53,40 +64,48 @@ class MethodInv extends Expression {
 		return methodsOfDep;
 	}
 
-//	generate all possible parameter expressions
-//	which rank-th of mname's parameter is settled
-//	return result until rank equals method name's #parameter
-	private static Vector<Expression[]> generateParameterExps(Vector<Expression[]> expsParaV
-			,MName mname, Vector<Expression> methodsOfDepM1, int rank) {
+	// generate all possible parameter expressions with decide whether it is a
+	// duplucated expressions
+	// which rank-th of mname's parameter is settled
+	// return result until rank equals method name's #parameter
+	private static Vector<DuplicateFlag> generateParameterExps(Vector<DuplicateFlag> expsDF_V, MName mname,
+			Vector<Expression> methodsOfDepM1, int rank, int depth) {
 
-		if(rank == mname.getParameterType().length) {
-			return expsParaV;
-		}else {
-			Vector<Expression[]> expParaV_auxi = new Vector<Expression[]>();
-//			Expression[] -> Vector<Expression[]>
-			for(Expression[] expPara : expsParaV) {
-				expParaV_auxi.addAll(addForeach(expPara,mname,methodsOfDepM1,rank));
+		if (rank == mname.getParameterType().length) {
+			return expsDF_V;
+		} else {
+			Vector<DuplicateFlag> expsDF_V_auxi = new Vector<DuplicateFlag>();
+			// Expression[] -> Vector<Expression[]>
+			for (DuplicateFlag expOfAllParaDF : expsDF_V) {
+				expsDF_V_auxi.addAll(addForeach(expOfAllParaDF, mname, methodsOfDepM1, rank, depth));
 			}
-			return generateParameterExps(expParaV_auxi,mname,methodsOfDepM1,rank+1);
+			return generateParameterExps(expsDF_V_auxi, mname, methodsOfDepM1, rank + 1, depth);
 		}
 	}
 
-	public static Vector<Expression[]> addForeach(Expression[] expParaM1,
-			MName mname,Vector<Expression> methodsOfDepM1,int rank){
-		Vector<Expression[]> expParV = new Vector<Expression[]>();
-		int paraLength = expParaM1.length;
-		for(Expression exp : methodsOfDepM1) {
-			if(mname.matchType(exp.getType(), rank)) {
-				Expression[] expPara= new Expression[paraLength + 1];
-				for(int i = 0 ; i < paraLength;i++) {
-					expPara[i] = expParaM1[i];
+	public static Vector<DuplicateFlag> addForeach(DuplicateFlag expOfAllParaF, MName mname,
+			Vector<Expression> methodsOfDepM1, int rank, int depth) {
+		Vector<DuplicateFlag> expParDF_V = new Vector<DuplicateFlag>();
+		int paraLength = expOfAllParaF.getExpsP().length;
+		for (Expression exp : methodsOfDepM1) {
+			if (mname.matchType(exp.getType(), rank)) {
+				Expression[] expPara = new Expression[paraLength + 1];
+				for (int i = 0; i < paraLength; i++) {
+					expPara[i] = expOfAllParaF.getExpsP()[i];
 				}
 				expPara[paraLength] = exp;
-				expParV.add(expPara);
+				boolean DF_Old = expOfAllParaF.isFlag();
+				Expression expR = expOfAllParaF.getExpR();
+				boolean DF_Con = !(exp.getDepth() == (depth - 1));
+				if(DF_Old) {
+					expParDF_V.add(new DuplicateFlag(DF_Con,expR,expPara));
+				}else {
+					expParDF_V.add(new DuplicateFlag(DF_Old,expR,expPara));
+				}
 			}
 		}
-		return expParV;
-		
+		return expParDF_V;
+
 	}
 
 	// score function
@@ -117,14 +136,15 @@ class MethodInv extends Expression {
 		}
 		return score;
 	}
-	
+
 	// getDepth
 	public int getDepth() {
-		return 1 + this.maxNum(this.getExpFront(),this.getExpBack());
+		return 1 + this.maxNum(this.getExpFront(), this.getExpBack());
 	}
+
 	public int maxNum(Expression expF, Expression[] expsB) {
 		int depthOfExpF = expF.getDepth();
-		for(int i = 0 ; i < expsB.length ; i ++) {
+		for (int i = 0; i < expsB.length; i++) {
 			int depthOfExpFI = expsB[i].getDepth();
 			if (depthOfExpF < depthOfExpFI) {
 				depthOfExpF = depthOfExpFI;
@@ -142,7 +162,7 @@ class MethodInv extends Expression {
 	private String expBack2String() {
 		if (getExpBack().length == 0) {
 			return "";
-		}else {
+		} else {
 			String expBack2Str = getExpBack()[0] + "";
 			for (int i = 1; i < getExpBack().length; i++) {
 				expBack2Str += "," + getExpBack()[i];
@@ -150,7 +170,7 @@ class MethodInv extends Expression {
 			return expBack2Str;
 		}
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
