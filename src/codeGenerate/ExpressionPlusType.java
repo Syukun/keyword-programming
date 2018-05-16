@@ -5,7 +5,7 @@ import java.util.Vector;
 public class ExpressionPlusType {
 	private String type;
 	private Vector<Expression> exps;
-	public ExpressionPlusType(String type,Vector<Expression> vector) {
+	public ExpressionPlusType(String type,Vector<Expression> exps) {
 		this.setType(type);
 		this.setExps(exps);
 	}

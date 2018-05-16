@@ -37,9 +37,7 @@ public abstract class Expression {
 		Vector<ExpressionPlusType> expsT = new Vector<ExpressionPlusType>();
 		if(depth == 1) {
 			expsT.addAll(Int.generateMaxScoreT(depth, keyword));
-			types.add("Integer");
-			expsT.addAll(Var.generateMaxScoreT(depth, keyword ,types));
-			// types.addAll(Var...);
+			expsT.addAll(Var.generateMaxScoreT(depth, keyword));
 		}
 		return expsT;
 	}

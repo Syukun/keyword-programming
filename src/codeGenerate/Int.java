@@ -16,7 +16,7 @@ class Int extends Expression {
 	public static Vector<Expression> generate(int depth) {
 		Vector<Expression> iV = new Vector<Expression>();
 		iV.add(new Int(1));
-		// iV.add(new Int(2));
+		 iV.add(new Int(2));
 		// iV.add(new Int(3));
 		// ...
 		return iV;
@@ -44,30 +44,30 @@ class Int extends Expression {
 		Vector<Expression> iV = Int.generate(depth);
 		Vector<ExpressionPlusType> expsMaxScoreTV = new Vector<ExpressionPlusType>();
 		Vector<Expression> iVMax = Int.generateMaxScoreExps(keywords, iV);
-		ExpressionPlusType expMaxScoreT = new ExpressionPlusType("Int",iVMax);
+		ExpressionPlusType expMaxScoreT = new ExpressionPlusType("Integer",iVMax);
 		expsMaxScoreTV.add(expMaxScoreT);
 		return expsMaxScoreTV;
 	}
 	
 	public static Vector<Expression> generateMaxScoreExps(String keywords,Vector<Expression> exps){
-		Vector<Expression> expsMaxSco = new Vector<Expression>();
+		Vector<Expression> expsMaxScore = new Vector<Expression>();
 		int SIZE = exps.size();
 		Expression expInit = exps.get(0);
-		expsMaxSco.add(expInit);
+		expsMaxScore.add(expInit);
 		float maxScore = expInit.score(keywords);
 		for(int i=1 ; i < SIZE ; i++) {
 			Expression expI = exps.get(i);
 			float currentScore = expI.score(keywords);
 			if(currentScore > maxScore) {
 				maxScore = currentScore;
-				expsMaxSco.clear();
-				expsMaxSco.add(expI);
+				expsMaxScore.clear();
+				expsMaxScore.add(expI);
 			}else if(currentScore == maxScore) {
-				expsMaxSco.add(expI);
+				expsMaxScore.add(expI);
 			}
 		}
 		
-		return expsMaxSco;
+		return expsMaxScore;
 	}
 	
 	// getDepth

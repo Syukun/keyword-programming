@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Vector;
 
 import org.junit.Test;
@@ -185,11 +186,20 @@ public class ExpressionTest {
 	@Test
 	public void testGenerateMaxScore() {
 		int depth = 1;
-		String keyword = "line";
+		System.out.println("Depth = " + depth +  " : all possible expression are");
+		Expression.generate(depth).stream().forEach(System.out::println);
+		Scanner sc = new Scanner(System.in);
+		System.out.print("Keyword : ");
+		String keyword = null;
+		if(sc.hasNextLine()) {
+			keyword = sc.nextLine();
+		}
 		Vector<String> types= new Vector<String>();
-		Vector<ExpressionPlusType> ept = new Vector<ExpressionPlusType>();
-		ept = Expression.generateMaxScoreT(depth, keyword, types);
-		System.out.println("size is :" + ept.size());
+		Vector<ExpressionPlusType> eptV = new Vector<ExpressionPlusType>();
+		eptV = Expression.generateMaxScoreT(depth, keyword, types);
+		for(ExpressionPlusType ept:eptV) {
+			ept.getExps().stream().forEach(System.out::println);
+		}
 	}
 
 	

@@ -17,10 +17,13 @@ class Var extends Expression {
 	// generate Function
 	public static Vector<Expression> generate(int depth) {
 		Vector<Expression> varV = new Vector<Expression>();
-		varV.add(new Var("array", new Type("List<String>")));
-		varV.add(new Var("src", new Type("BufferedReader")));
-		varV.add(new Var("toString", new Type("String")));
-		varV.add(new Var("line",new Type("String")));
+//		varV.add(new Var("array", new Type("List<String>")));
+//		varV.add(new Var("src", new Type("BufferedReader")));
+//		varV.add(new Var("toString", new Type("String")));
+//		varV.add(new Var("line",new Type("String")));
+		varV.add(new Var("a",new Type("String")));
+		varV.add(new Var("b",new Type("String")));
+		varV.add(new Var("c",new Type("String")));
 		// ...
 		return varV;
 	}
@@ -53,22 +56,24 @@ class Var extends Expression {
 		return score;
 	}
 	
-	
-	public static Vector<ExpressionPlusType> generateMaxScoreT(int depth, String keywords,Vector<String> types){
+	// generate Var Expressions in all possible types
+	// and only remain those with max scores.
+	// T represents method or variable that need consider type
+	public static Vector<ExpressionPlusType> generateMaxScoreT(int depth, String keywords){
+		Vector<String> types = new Vector<String>();
 		Vector<Expression> varV = Var.generate(depth);
 		Vector<ExpressionPlusType> expsMaxScoreTV = new Vector<ExpressionPlusType>();
-		int SIZE = varV.size();
-		for(int i = 0; i < SIZE; i++) {
+		int SIZE_varV = varV.size();
+		for(int i = 0; i < SIZE_varV; i++) {
 			Expression varI = varV.get(i);
 			String typeI = varI.getType().toString();
-			if(types.contains(typeI)) {
-				// this should be modified
-				//expsMaxScoreTV.transMaxScore(varI,keywords);
-				//Var.expsMaxScoreT(varI,expsMaxScoreTV,keywords);
+			int index_type = types.indexOf(typeI);
+			if(index_type>=0) {
+				Var.getExpsMaxScoreT(varI,expsMaxScoreTV,keywords,index_type);
 			}else {
-				Vector<Expression> varMaxT = new Vector<Expression>();
-				varMaxT.add(varI);
-				expsMaxScoreTV.add(new ExpressionPlusType(typeI,varMaxT));
+				Vector<Expression> varNewT = new Vector<Expression>();
+				varNewT.add(varI);
+				expsMaxScoreTV.add(new ExpressionPlusType(typeI,varNewT));
 				types.add(typeI);
 			}
 		}
@@ -76,26 +81,23 @@ class Var extends Expression {
 		return expsMaxScoreTV;
 	}
 	
-	// this is wrong right now
-	public static Vector<ExpressionPlusType> expsMaxScoreT(Expression var,Vector<ExpressionPlusType> expsMaxScoreTV ,String keywords){
-		String type = var.getType().toString();
-		Vector<Expression> varVT = new Vector<Expression>();
+	// compare the score of var with the expression of old one
+	// and remain the max score or add that var expression when the score is equal
+	public static Vector<ExpressionPlusType> getExpsMaxScoreT(Expression var,Vector<ExpressionPlusType> expsMaxScoreTV ,String keywords,int index_type){
+		// Set which contains : type = type of var  
+		//					   Vector of expression is all expression in that type with the max score.
+		ExpressionPlusType expsT_i = expsMaxScoreTV.get(index_type);
+		// new one
 		float scoreVar = var.score(keywords);
-		int SIZE = expsMaxScoreTV.size();
-		for(int i = 0; i < SIZE ; i ++) {
-			ExpressionPlusType expsTI = expsMaxScoreTV.get(i);
-			if(expsTI.getType() == type) {
-				// the score of current max score in the vector
-				float scoreVec = expsTI.getExps().get(0).score(keywords);
-				if(scoreVar>scoreVec) {
-					varVT.add(var);
-					expsTI.getExps().clear();
-					expsTI.setExps(varVT);
-				}if(scoreVar == scoreVec) {
-					expsTI.getExps().add(var);
-				}
-				break;
-			}
+		
+		Expression exp0 = expsT_i.getExps().get(0);
+		float scoreExp0 = exp0.score(keywords); 
+		
+		if(scoreVar > scoreExp0) {
+			expsT_i.getExps().clear();
+			expsT_i.getExps().add(var);
+		}else if(scoreVar == scoreExp0) {
+			expsT_i.getExps().add(var);
 		}
 		return expsMaxScoreTV;
 	}
