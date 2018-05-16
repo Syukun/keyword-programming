@@ -76,16 +76,16 @@ class MName {
 	// return all method names
 	public static Vector<MName> allMethodName() {
 		Vector<MName> allMethodNameV = new Vector<MName>();
-//		 allMethodNameV.add(
-//		 new MName("add", new Type("boolean"), new Type[] { new Type("List<String>"),
-//		 new Type("String") }));
-//		 allMethodNameV.add(new MName("readLine", new Type("String"), new Type[] { new
-//		 Type("BufferedReader") }));
-//		 allMethodNameV
-//		 .add(new MName("valueOf", new Type("String"), new Type[] { new
-//		 Type("String"), new Type("Object") }));
-//		allMethodNameV
-//				.add(new MName("addString", new Type("String"), new Type[] { new Type("String"),new Type("String")}));
+		 allMethodNameV.add(
+		 new MName("add", new Type("boolean"), new Type[] { new Type("List<String>"),
+		 new Type("String") }));
+		 allMethodNameV.add(new MName("readLine", new Type("String"), new Type[] { new
+		 Type("BufferedReader") }));
+		 allMethodNameV
+		 .add(new MName("valueOf", new Type("String"), new Type[] { new
+		 Type("String"), new Type("Object") }));
+		allMethodNameV
+				.add(new MName("addString", new Type("String"), new Type[] { new Type("String"),new Type("String")}));
 		 allMethodNameV.add(
 		 new MName("add", new Type("String"), new Type[] { new Type("String"), new
 		 Type("String") ,new Type("String")}));

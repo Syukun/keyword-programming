@@ -40,6 +40,36 @@ class Int extends Expression {
 		return score;
 	}
 	
+	public static Vector<ExpressionPlusType> generateMaxScoreT(int depth, String keywords){
+		Vector<Expression> iV = Int.generate(depth);
+		Vector<ExpressionPlusType> expsMaxScoreTV = new Vector<ExpressionPlusType>();
+		Vector<Expression> iVMax = Int.generateMaxScoreExps(keywords, iV);
+		ExpressionPlusType expMaxScoreT = new ExpressionPlusType("Int",iVMax);
+		expsMaxScoreTV.add(expMaxScoreT);
+		return expsMaxScoreTV;
+	}
+	
+	public static Vector<Expression> generateMaxScoreExps(String keywords,Vector<Expression> exps){
+		Vector<Expression> expsMaxSco = new Vector<Expression>();
+		int SIZE = exps.size();
+		Expression expInit = exps.get(0);
+		expsMaxSco.add(expInit);
+		float maxScore = expInit.score(keywords);
+		for(int i=1 ; i < SIZE ; i++) {
+			Expression expI = exps.get(i);
+			float currentScore = expI.score(keywords);
+			if(currentScore > maxScore) {
+				maxScore = currentScore;
+				expsMaxSco.clear();
+				expsMaxSco.add(expI);
+			}else if(currentScore == maxScore) {
+				expsMaxSco.add(expI);
+			}
+		}
+		
+		return expsMaxSco;
+	}
+	
 	// getDepth
 	public int getDepth() {
 		return 1;

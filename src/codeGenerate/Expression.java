@@ -31,6 +31,19 @@ public abstract class Expression {
 		return exps;
 	}
 	
+	// generate Vector of expressions with max score
+	// according to keyword for each available types
+	public static Vector<ExpressionPlusType> generateMaxScoreT(int depth,String keyword,Vector<String> types){
+		Vector<ExpressionPlusType> expsT = new Vector<ExpressionPlusType>();
+		if(depth == 1) {
+			expsT.addAll(Int.generateMaxScoreT(depth, keyword));
+			types.add("Integer");
+			expsT.addAll(Var.generateMaxScoreT(depth, keyword ,types));
+			// types.addAll(Var...);
+		}
+		return expsT;
+	}
+	
 
 	// score function
 	public float score(String keywords) {
@@ -82,6 +95,8 @@ public abstract class Expression {
 		}
 		return maxScoExpsV;
 	}
+	
+	
 
 	// decide whether the word is in a keywordList and whether the corresponding
 	// keyword

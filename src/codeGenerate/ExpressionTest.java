@@ -159,10 +159,10 @@ public class ExpressionTest {
 
 	@Test
 	public void testGenerateMethodInv() {
-		 int i = 3;
-		 int j = Expression.generate(i).size();
-		 System.out.println("Count is : " + j);
-		 Expression.generate(i).stream().forEach(System.out::println);
+//		 int i = 3;
+//		 int j = Expression.generate(i).size();
+//		 System.out.println("Count is : " + j);
+//		 Expression.generate(i).stream().forEach(System.out::println);
 	}
 
 	@Test
@@ -183,10 +183,15 @@ public class ExpressionTest {
 	}
 	
 	@Test
-	public void testDuplicateDeleteFunction() {
-		// addForeach
-		
+	public void testGenerateMaxScore() {
+		int depth = 1;
+		String keyword = "line";
+		Vector<String> types= new Vector<String>();
+		Vector<ExpressionPlusType> ept = new Vector<ExpressionPlusType>();
+		ept = Expression.generateMaxScoreT(depth, keyword, types);
+		System.out.println("size is :" + ept.size());
 	}
+
 	
 
 }
